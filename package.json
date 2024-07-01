@@ -24,12 +24,17 @@
     "zip": "npm run build && node src/zip.js"
   },
   "dependencies": {
+    "@langchain/community": "^0.2.16",
+    "@langchain/core": "^0.2.11",
+    "@langchain/textsplitters": "^0.0.3",
+    "html-to-text": "^9.0.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@crxjs/vite-plugin": "^2.0.0-beta.19",
     "@types/chrome": "^0.0.246",
+    "@types/html-to-text": "^9.0.4",
     "@types/react": "^18.2.28",
     "@types/react-dom": "^18.2.13",
     "@vitejs/plugin-react": "^4.1.0",
@@ -38,5 +43,8 @@
     "prettier": "^3.0.3",
     "typescript": "^5.2.2",
     "vite": "^4.4.11"
+  },
+  "resolutions": {
+    "@langchain/core": "0.2.11"
   }
 }

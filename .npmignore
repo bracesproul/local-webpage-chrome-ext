@@ -24,3 +24,4 @@ coverage
 # ignore ide settings
 .idea
 .vscode
+.env
