@@ -19,7 +19,8 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "fmt": "prettier --write '**/*.{tsx,ts,json,css,scss,md}'",
+    "format": "NODE_OPTIONS=--max-old-space-size=4096 prettier --write '**/*.{tsx,ts,json,css,scss,md}'",
+    "format:check": "NODE_OPTIONS=--max-old-space-size=4096 prettier '**/*.{tsx,ts,json,css,scss,md}'",
     "zip": "npm run build && node src/zip.js"
   },
   "dependencies": {
