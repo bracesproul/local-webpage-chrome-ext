@@ -30,14 +30,13 @@ function getPageHTML(): Promise<string> {
   })
 }
 
-const QUESTION = `Did President Emmanuel Macron's snap election in France go well for him?`
+const QUESTION = `According to the essay, what do people in Los Angeles not like to do?`
 
 export const Popup = () => {
   const [totalChars, setTotalChars] = useState(0)
   const [results, setResults] = useState<
     Array<{
       llmResponse: string
-      context: string
     }>
   >([])
 
@@ -76,10 +75,6 @@ export const Popup = () => {
               <p>
                 <strong>LLM Response: </strong>
                 {result.llmResponse}
-              </p>
-              <p>
-                <strong>Context: </strong>
-                {result.context}
               </p>
               <br />
             </div>

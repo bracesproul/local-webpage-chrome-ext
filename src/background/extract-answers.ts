@@ -2,110 +2,31 @@ import { RecursiveCharacterTextSplitter } from '@langchain/textsplitters'
 import { PromptTemplate } from '@langchain/core/prompts'
 import { StringPromptValueInterface } from '@langchain/core/prompt_values'
 
-export const BASE_PROMPT_2 = `You're an expert assistant tasked with answering the users question, given the context provided.
-Think through this step by step. Once you're finished thinking, respond with your answer.
-If you believe you have the answer, you MUST include a reference to exactly where the answer was provided in your response.
-If the answer is not present, respond with "NO".
+export const BASE_PROMPT_2 = `You are an AI assistant tasked with extracting the answer to a user's question from a given text snippet. Your goal is to provide a concise and accurate answer based solely on the information provided in the context.
 
-[Full text of example #1]
-[QUESTION]
-Why is the sky blue?
-[/QUESTION]
-[CONTEXT]
-The dog walked into the house because he was hungry.
-[/CONTEXT]
-[RESPONSE]
-NO
-[/RESPONSE]<ctrl23>
-
-[Full text of example #2]
-[QUESTION]
-Why did the chicken cross the road?
-[/QUESTION]
-[CONTEXT]
-The chicken lived in a small town and in order to get to work, he needed to cross the road.
-[/CONTEXT]
-[RESPONSE]
-The chicken crossed the road to get to work. Context: "...in order to get to work, he needed to cross the road."
-[/RESPONSE]<ctrl23>
-
-[Full text of example #3]
-[QUESTION]
-Should I wear sunglasses when I'm outside?
-[/QUESTION]
-[CONTEXT]
-Lets talk about the outdoors! First, it is important to protect your eyes from the sun. This should be done by wearing sunglasses while outside. Next, you should always apply sunscreen.
-[/CONTEXT]
-[RESPONSE]
-Yes, you should always wear sunglasses while outside. Context: "First, it is important to protect your eyes from the sun. This should be done by wearing sunglasses while outside."
-[/RESPONSE]<ctrl23>
-
-[Full text of actual question and context]
-[QUESTION]
-{question}
-[/QUESTION]
-[CONTEXT]
+Here is the context you will be working with:
+<context>
 {context}
-[/CONTEXT]
+</context>
 
-[RESPONSE]`
-
-export const CLARIFY_PROMPT = `You're an expert assistant tasked with confirming whether or not another assistant has provided the correct answer to the user's question.
-Your job is to determine whether or not the original answer was accurate. If the answer is correct, respond with "YES". If the answer is incorrect, respond with "NO".
-You must take your time and examine all the context carefully before making your decision as it is common for the original assistant to provide answers when they are not present in the context.
-
-[Full text of example #1]
-[QUESTION]
-Why is the sky blue?
-[/QUESTION]
-[CONTEXT]
-The dog walked into the house because he was hungry.
-[/CONTEXT]
-[ANSWER]
-The sky is blue because it wants to be.
-[/ANSWER]
-[RESPONSE]
-NO
-[/RESPONSE]<ctrl23>
-
-[Full text of example #2]
-[QUESTION]
-Why did the chicken cross the road?
-[/QUESTION]
-[CONTEXT]
-The chicken lived in a small town and in order to get to work, he needed to cross the road.
-[/CONTEXT]
-[ANSWER]
-The chicken crossed the road to get to work. Context: "...in order to get to work, he needed to cross the road."
-[/ANSWER]
-[RESPONSE]
-YES
-[/RESPONSE]<ctrl23>
-
-[Full text of example #3]
-[QUESTION]
-When did Columbus discover America?
-[/QUESTION]
-[CONTEXT]
-Lets talk about the outdoors! First, it is important to protect your eyes from the sun. This should be done by wearing sunglasses while outside. Next, you should always apply sunscreen.
-[/CONTEXT]
-[ANSWER]
-Columbus discovered America in 1492.
-[/ANSWER]
-[RESPONSE]
-NO
-[/RESPONSE]<ctrl23>
-
-[QUESTION]
+Here is the question you need to answer:
+<question>
 {question}
-[/QUESTION]
-[CONTEXT]
-{context}
-[/CONTEXT]
-[ANSWER]
-{answer}
-[/ANSWER]
-[RESPONSE]`
+</question>
+
+To answer this question, follow these steps:
+1. Carefully read and analyze the provided context.
+2. Identify the specific information that directly answers the question.
+3. Formulate a concise answer using only the information found in the context.
+4. Do not include any information or assumptions that are not explicitly stated in the given text.
+
+You must be absolutely certain the answer is in the text. If you cannot find a direct answer to the question in the context, respond with "No answer found in the given context."
+
+Present your answer within <ANSWER> tags. Your response should be brief and to the point, directly addressing the question asked.
+
+It is extremely important that you do not use any information or context when responding except for the context provided to you inside the <context> tags. If you respond with an answer using information not provided in the context, you will be considered to have failed the task.
+
+Remember, accuracy is crucial. It's better to respond with "No answer found in the given context" than to provide an answer that isn't directly supported by the given text.`
 
 /**
  * Split text into chunks
@@ -128,7 +49,6 @@ export async function constructPrompt(fields: {
 
   return Promise.all(
     splitTexts.map((text) => {
-      console.log('split text.length', text.length)
       return PromptTemplate.fromTemplate(BASE_PROMPT_2).invoke({
         context: text,
         question: fields.input,

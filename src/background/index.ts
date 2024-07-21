@@ -25,27 +25,16 @@ async function handleQueryChromeLLM(
 
   let responses: Array<{
     llmResponse: string
-    context: string
   }> = []
   for await (const prompt of prompts) {
     const res = await chromeLLM(prompt, llm)
-    if (res.containsAnswer) {
-      responses.push({
-        llmResponse: res.fullResponse,
-        context: res.context,
-      })
-    }
+    responses.push({
+      llmResponse: res,
+    })
   }
 
-  if (responses.length) {
-    sendResponse({
-      type: 'CHROME_LLM_RESPONSE',
-      response: responses,
-    })
-  } else {
-    sendResponse({
-      type: 'CHROME_LLM_RESPONSE',
-      response: 'No answers found',
-    })
-  }
+  sendResponse({
+    type: 'CHROME_LLM_RESPONSE',
+    response: responses,
+  })
 }
